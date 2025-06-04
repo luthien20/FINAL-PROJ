@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const allTasksCount = document.getElementById('allTasksCount');
     const pendingTasksCount = document.getElementById('pendingTasksCount');
     const completedTasksCount = document.getElementById('completedTasksCount');
+    const missingTasksCount = document.getElementById('missingTasksCount'); // CHANGED: Get missing count element
 
     const taskSummaryItems = document.querySelectorAll('.task-summary-item');
     const currentFilterText = document.getElementById('currentFilterText');
@@ -19,9 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const emptyState = document.getElementById('emptyState');
 
     // --- Global State ---
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || []; 
-    let currentFilter = 'all'; 
-    let currentPriorityFilter = 'all'; 
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    let currentFilter = 'all';
+    let currentPriorityFilter = 'all';
+
 
     // --- Flatpickr Initialization ---
     flatpickr(dueDateInput, {
@@ -51,27 +53,48 @@ document.addEventListener('DOMContentLoaded', () => {
         today.setHours(0, 0, 0, 0);
         dueDate.setHours(0, 0, 0, 0);
 
-        const timeDiff = dueDate.getTime() - today.getTime(); 
+        const timeDiff = dueDate.getTime() - today.getTime();
         const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days, rounding up
 
-        const deadlineThresholdDays = 3; // Define your "near deadline" threshold (e.g., 3 days)
-
+        const deadlineThresholdDays = 3; 
         return daysDiff > 0 && daysDiff <= deadlineThresholdDays;
+    }
+
+    function isMissing(task) {
+        if (!task.dueDate || task.isCompleted) return false; // Not missing if no due date or already completed
+
+        const dueDate = new Date(task.dueDate);
+        const today = new Date();
+        // Set hours, minutes, seconds, milliseconds to 0 for accurate day comparison
+        today.setHours(0, 0, 0, 0);
+        dueDate.setHours(0, 0, 0, 0);
+
+        return dueDate.getTime() < today.getTime(); // If due date is strictly before today
     }
 
     function createTaskElement(task) {
         const taskItem = document.createElement('div');
-        taskItem.classList.add('task-item', `status-${task.isCompleted ? 'completed' : 'pending'}`);
+        taskItem.classList.add('task-item'); 
         taskItem.dataset.id = task.id;
-        taskItem.dataset.status = task.isCompleted ? 'completed' : 'pending';
-        taskItem.dataset.priority = task.priority;
+        taskItem.dataset.priority = task.priority; 
 
         const priorityClass = `task-priority-${task.priority}`;
 
         let nearDeadlineNotice = '';
         if (!task.isCompleted && isNearDeadline(task.dueDate)) {
-            taskItem.classList.add('near-deadline'); // Add a class for CSS styling
-            nearDeadlineNotice = `                  <span class="deadline-notice"><i class="fas fa-exclamation-triangle"></i>Due Soon!</span>`;
+            taskItem.classList.add('near-deadline'); 
+            nearDeadlineNotice = `<span class="deadline-notice"><i class="fas fa-exclamation-triangle"></i>Due Soon!</span>`;
+        }
+
+        if (isMissing(task)) {
+            taskItem.classList.add('status-missing');
+            taskItem.dataset.status = 'missing'; 
+        } else if (task.isCompleted) {
+            taskItem.classList.add('status-completed');
+            taskItem.dataset.status = 'completed';
+        } else {
+            taskItem.classList.add('status-pending');
+            taskItem.dataset.status = 'pending';
         }
 
 
@@ -109,11 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
         taskListContainer.innerHTML = ''; // Clear existing tasks
         let filteredTasks = tasks;
 
-        // Apply main filter (All, Pending, Completed)
+        // Apply main filter (All, Pending, Completed, Missing)
         if (currentFilter === 'pending') {
-            filteredTasks = filteredTasks.filter(task => !task.isCompleted);
+            filteredTasks = filteredTasks.filter(task => !task.isCompleted && !isMissing(task)); // CHANGED: Filter for missing
         } else if (currentFilter === 'completed') {
             filteredTasks = filteredTasks.filter(task => task.isCompleted);
+        } else if (currentFilter === 'missing') { // CHANGED: Filter for missing tasks
+            filteredTasks = filteredTasks.filter(task => isMissing(task));
         }
 
         // Apply priority filter
@@ -135,8 +160,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Update the counts in the summary cards
     function updateTaskCounts() {
         allTasksCount.textContent = tasks.length;
-        pendingTasksCount.textContent = tasks.filter(task => !task.isCompleted).length;
+        // CHANGED: Exclude missing from pending
+        pendingTasksCount.textContent = tasks.filter(task => !task.isCompleted && !isMissing(task)).length;
         completedTasksCount.textContent = tasks.filter(task => task.isCompleted).length;
+        missingTasksCount.textContent = tasks.filter(task => isMissing(task)).length; // CHANGED: Calculate missing count
 
         // Update active class for summary items
         taskSummaryItems.forEach(item => {
@@ -151,7 +178,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const filterTextMap = {
             'all': 'All Tasks',
             'pending': 'Pending',
-            'completed': 'Completed'
+            'completed': 'Completed',
+            'missing': 'Missing' // CHANGED: Add missing text
         };
         currentFilterText.textContent = filterTextMap[currentFilter];
     }
@@ -159,14 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add a new task
     function addTask(title, description, dueDate, priority) {
         const newTask = {
-            id: Date.now().toString(), 
+            id: Date.now().toString(),
             title,
             description,
             dueDate,
             priority,
             isCompleted: false
         };
-        tasks.unshift(newTask); 
+        tasks.unshift(newTask);
         saveTasks();
         renderTasks();
     }
@@ -184,8 +212,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Trigger confetti if task was just completed
             if (!wasCompleted && tasks[taskIndex].isCompleted) {
                 confetti({
-                    particleCount: 100,
-                    spread: 70,
+                    particleCount: 700,
+                    spread: 200,
                     origin: { y: 0.6 }
                 });
             }
@@ -193,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    // Edit a task 
+    // Edit a task
     function editTask(id) {
         const task = tasks.find(t => t.id === id);
         if (!task) return;
@@ -218,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (newPriority !== null && ['minor', 'moderate', 'top'].includes(newPriority.toLowerCase())) {
             task.priority = newPriority.toLowerCase();
         }
-        
+
         saveTasks();
         renderTasks();
     }
@@ -280,5 +308,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // --- Initial Load ---
-    renderTasks(); 
+    renderTasks();
 });

@@ -301,6 +301,17 @@ select {
     background-color: var(--status-completed);
     color: var(--card-bg);
 }
+.task-summary-item[data-filter="missing"].active {
+    background-color: rgba(220, 53, 69, 0.1); 
+    color: var(--priority-top);
+}
+.task-summary-item[data-filter="missing"].active .task-count {
+    background-color: var(--priority-top); 
+    color: var(--card-bg); 
+}
+.task-item.status-missing { 
+    border-left-color: var(--priority-top);
+}
 
 .task-filters-card {
     background-color: var(--card-bg);

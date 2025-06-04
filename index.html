@@ -62,17 +62,20 @@
         </main>
 
         <section class="task-list-section">
-            <div class="task-summary-card">
-                <div class="task-summary-item active" data-filter="all">
-                    <i class="fas fa-list-ul"></i> All Tasks <span class="task-count" id="allTasksCount">0</span>
+                <div class="task-summary-card">
+                    <div class="task-summary-item active" data-filter="all">
+                        <i class="fas fa-list-ul"></i> All Tasks <span class="task-count" id="allTasksCount">0</span>
+                    </div>
+                    <div class="task-summary-item" data-filter="pending">
+                        <i class="fas fa-hourglass-half"></i> Pending <span class="task-count" id="pendingTasksCount">0</span>
+                    </div>
+                    <div class="task-summary-item" data-filter="completed">
+                        <i class="fas fa-check-circle"></i> Completed <span class="task-count" id="completedTasksCount">0</span>
+                    </div>
+                    <div class="task-summary-item" data-filter="missing">
+                        <i class="fas fa-exclamation-circle"></i> Missing <span class="task-count" id="missingTasksCount">0</span>
+                    </div>
                 </div>
-                <div class="task-summary-item" data-filter="pending">
-                    <i class="fas fa-hourglass-half"></i> Pending <span class="task-count" id="pendingTasksCount">0</span>
-                </div>
-                <div class="task-summary-item" data-filter="completed">
-                    <i class="fas fa-check-circle"></i> Completed <span class="task-count" id="completedTasksCount">0</span>
-                </div>
-            </div>
 
             <div class="task-filters-card">
                 <div class="current-filter-display">
