@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 :root {
-    --primary-purple: #6a5acd; 
+    --primary-purple: #6a5acd;
     --light-bg: #f0f2f5;
     --card-bg: #fffdf5;
     --text-color-dark: #333;
@@ -11,12 +11,12 @@
     --secondary-color: #888; 
 
     --status-all: var(--primary-purple);
-    --status-pending: #ffc107;
+    --status-pending: #ffc107; 
     --status-completed: #28a745; 
 
     --priority-minor: #17a2b8; 
     --priority-moderate: #ffc107; 
-    --priority-top: #dc3545; 
+    --priority-top: #dc3545;
 }
 
 body {
@@ -29,20 +29,19 @@ body {
     align-items: flex-start; 
     min-height: 100vh;
     margin: 0;
-    padding: 40px 20px; 
+    padding: 40px 20px;
     box-sizing: border-box;
     color: var(--text-color-dark);
     width: 100%;
-    overflow-x: hidden; 
+    overflow-x: hidden;
     align-items: center;
 }
 
 .container {
     width: 100%;
-    max-width: 800px; 
+    max-width: 800px;
     text-align: center;
 }
-
 
 .app-header {
     margin-bottom: 40px;
@@ -75,20 +74,19 @@ body {
     margin-top: 0;
 }
 
-
 .task-form-card {
     background-color: var(--card-bg);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     text-align: left;
-    margin-bottom: 30px; 
+    margin-bottom: 30px;
     width: 100%; 
     max-width: 700px; 
 }
 
 .container > .task-form-card {
-    max-width: 740px;
+    max-width: 740px; 
     width: 100%; 
     align-items:center; 
 }
@@ -116,7 +114,7 @@ body {
     position: relative; 
 }
 
-.sr-only { 
+.sr-only {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -193,7 +191,7 @@ select {
     -webkit-appearance: none;
     -moz-appearance: none;
     background-color: var(--card-bg); 
-    padding-right: 40px; 
+    padding-right: 40px;
     cursor: pointer;
 }
 
@@ -208,7 +206,6 @@ select {
     border-right: 2px solid var(--placeholder-color);
     pointer-events: none;
 }
-
 
 .add-task-btn {
     background-color: var(--primary-purple);
@@ -367,4 +364,292 @@ select {
     background-color: var(--light-bg);
     color: var(--text-color-dark);
     border-color: var(--text-color-dark);
+}
+
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px; 
+    width: 100%; 
+}
+
+.task-item {
+    background-color: var(--card-bg);
+    border-radius: 15px;
+    padding: 20px 25px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    border-left: 5px solid transparent; 
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.task-item:hover {
+    transform: translateY(-3px);
+}
+
+.task-item.status-pending {
+    border-left-color: var(--status-pending);
+}
+.task-item.status-completed {
+    border-left-color: var(--status-completed);
+    opacity: 0.8;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-title {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin: 0;
+    color: var(--text-color-dark);
+    flex-grow: 1; 
+    text-align: left;
+}
+
+.task-item.status-completed .task-title {
+    text-decoration: line-through;
+    color: var(--text-color-light);
+}
+
+.task-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.task-checkbox {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.task-edit-btn,
+.task-delete-btn {
+    background-color: transparent;
+    border: none;
+    color: var(--secondary-color);
+    font-size: 1em;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 5px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.task-edit-btn:hover {
+    color: var(--primary-purple);
+}
+
+.task-delete-btn:hover {
+    color: var(--priority-high);
+}
+
+.task-description {
+    font-size: 0.95em;
+    color: var(--text-color-light);
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.task-meta {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 15px;
+    font-size: 0.9em;
+    color: var(--text-color-light);
+}
+
+.task-meta i {
+    margin-right: 5px;
+    color: var(--secondary-color);
+}
+
+.task-priority {
+    padding: 3px 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    font-size: 0.85em;
+    color: var(--card-bg); 
+}
+
+.task-priority-minor {
+    background-color: var(--priority-minor);
+}
+.task-priority-moderate {
+    background-color: var(--priority-moderate);
+    color: var(--text-color-dark); 
+}
+.task-priority-top {
+    background-color: var(--priority-top);
+}
+
+.empty-state {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 40px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    margin-top: 20px; 
+}
+
+.empty-state-icon {
+    background-color: var(--light-bg);
+    color: var(--secondary-color);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 3em;
+    margin: 0 auto 20px auto;
+}
+
+.empty-state-text-large {
+    font-size: 1.4em;
+    font-weight: 500;
+    color: var(--text-color-dark);
+    margin-bottom: 10px;
+}
+
+.empty-state-text-small {
+    font-size: 1em;
+    color: var(--text-color-light);
+    margin-top: 0;
+}
+
+.flatpickr-calendar {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day:hover, .flatpickr-day.inRange {
+    background-color: var(--primary-purple);
+    border-color: var(--primary-purple);
+    color: white;
+}
+
+.flatpickr-day.today {
+    border-color: var(--primary-purple);
+}
+.flatpickr-day.today:hover {
+    background-color: var(--primary-purple);
+    color: white;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months, .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-month, .flatpickr-current-month .flatpickr-monthDropdown-months:hover, .flatpickr-current-month .flatpickr-monthDropdown-months:focus {
+    color: var(--text-color-dark);
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-month {
+    font-weight: 600;
+}
+
+.flatpickr-months .flatpickr-prev-month, .flatpickr-months .flatpickr-next-month {
+    color: var(--primary-purple);
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    .app-header h1 {
+        font-size: 2em;
+    }
+
+    .app-header p {
+        font-size: 1em;
+    }
+
+    .task-form-card,
+    .task-summary-card,
+    .task-filters-card,
+    .empty-state {
+        padding: 25px;
+    }
+
+    .form-header h2 {
+        font-size: 1.3em;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    input[type="text"],
+    textarea,
+    select {
+        padding: 12px 15px;
+        font-size: 0.95em;
+    }
+
+    .add-task-btn {
+        padding: 12px 25px;
+        font-size: 1em;
+    }
+
+    .task-summary-card {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .task-summary-item {
+        justify-content: center;
+        padding: 10px;
+    }
+
+    .task-filters-card {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-controls {
+        flex-direction: column;
+        width: 100%;
+        gap: 10px;
+    }
+    .filter-priority-wrapper,
+    .clear-filters-btn {
+        width: 100%;
+    }
+
+    .task-item {
+        padding: 15px 20px;
+    }
+
+    .task-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .task-actions {
+        width: 100%;
+        justify-content: flex-end; 
+    }
+
+    .task-description {
+        font-size: 0.9em;
+    }
+
+    .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .empty-state-text-large {
+        font-size: 1.2em;
+    }
+    .empty-state-text-small {
+        font-size: 0.9em;
+    }
 }
