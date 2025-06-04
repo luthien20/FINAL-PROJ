@@ -23,15 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentFilter = 'all'; 
     let currentPriorityFilter = 'all'; 
 
-
     // --- Flatpickr Initialization ---
     flatpickr(dueDateInput, {
-        dateFormat: "m/d/Y", 
-        altInput: true, 
+        dateFormat: "m/d/Y",
+        altInput: true,
         altFormat: "m/d/Y",
-        appendTo: document.body, 
+        appendTo: document.body,
         onClose: function(selectedDates, dateStr, instance) {
-            // This ensures the input value is updated correctly by Flatpickr
             dueDateInput.value = dateStr;
         }
     });
@@ -43,6 +41,24 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('tasks', JSON.stringify(tasks));
     }
 
+    // Helper function to check if a date is near the deadline
+    function isNearDeadline(dueDateStr) {
+        if (!dueDateStr) return false;
+
+        const dueDate = new Date(dueDateStr);
+        const today = new Date();
+        // Set hours, minutes, seconds, milliseconds to 0 for accurate day comparison
+        today.setHours(0, 0, 0, 0);
+        dueDate.setHours(0, 0, 0, 0);
+
+        const timeDiff = dueDate.getTime() - today.getTime(); 
+        const daysDiff = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // Convert to days, rounding up
+
+        const deadlineThresholdDays = 3; // Define your "near deadline" threshold (e.g., 3 days)
+
+        return daysDiff > 0 && daysDiff <= deadlineThresholdDays;
+    }
+
     function createTaskElement(task) {
         const taskItem = document.createElement('div');
         taskItem.classList.add('task-item', `status-${task.isCompleted ? 'completed' : 'pending'}`);
@@ -51,6 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
         taskItem.dataset.priority = task.priority;
 
         const priorityClass = `task-priority-${task.priority}`;
+
+        let nearDeadlineNotice = '';
+        if (!task.isCompleted && isNearDeadline(task.dueDate)) {
+            taskItem.classList.add('near-deadline'); // Add a class for CSS styling
+            nearDeadlineNotice = `                  <span class="deadline-notice"><i class="fas fa-exclamation-triangle"></i>Due Soon!</span>`;
+        }
+
 
         taskItem.innerHTML = `
             <div class="task-header">
@@ -65,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div class="task-meta">
                 ${task.dueDate ? `<span class="task-due-date"><i class="far fa-calendar-alt"></i> ${task.dueDate}</span>` : ''}
                 <span class="task-priority ${priorityClass}">${task.priority.charAt(0).toUpperCase() + task.priority.slice(1)} Priority</span>
-            </div>
+                ${nearDeadlineNotice} </div>
         `;
 
         // Event Listeners for actions within the task item
@@ -152,23 +175,23 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTaskCompletion(id) {
         const taskIndex = tasks.findIndex(task => task.id === id);
         if (taskIndex > -1) {
-            const wasCompleted = tasks[taskIndex].isCompleted; 
-            tasks[taskIndex].isCompleted = !wasCompleted; 
+            const wasCompleted = tasks[taskIndex].isCompleted; // Store previous state
+            tasks[taskIndex].isCompleted = !wasCompleted; // Toggle completion
 
             saveTasks();
             renderTasks();
 
             // Trigger confetti if task was just completed
             if (!wasCompleted && tasks[taskIndex].isCompleted) {
-                // Confetti animation
                 confetti({
-                    particleCount: 350, // Number of confetti particles
-                    spread: 150,         // How wide the confetti spreads
-                    origin: { y: 0.6 }  // Origin of the confetti (bottom-center)
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
                 });
             }
         }
     }
+
 
     // Edit a task 
     function editTask(id) {

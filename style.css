@@ -653,3 +653,61 @@ select {
         font-size: 0.9em;
     }
 }
+/* Styles for the near deadline notice */
+.task-item.near-deadline {
+    border-left-color: var(--priority-moderate); 
+}
+
+.deadline-notice {
+    background-color: var(--status-pending);
+    color: var(--text-color-dark); 
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 10px;
+    display: inline-flex; 
+    align-items: center;
+    gap: 5px;
+}
+
+.deadline-notice i {
+    color: var(--text-color-dark); /* Icon color */
+}
+
+.task-meta {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center; 
+    gap: 15px;
+    font-size: 0.9em;
+    color: var(--text-color-light);
+    flex-wrap: wrap; 
+}
+
+@media (max-width: 768px) {
+    .task-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+}
+/* deadline notice */
+.task-deadline-notice {
+    background-color: #ffeb3b; 
+    color: #333;
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-size: 0.8em;
+    font-weight: 600;
+    margin-left: 15px; 
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.task-deadline-notice i {
+    color: #f57f17; 
+    font-size: 1.1em;
+}
