@@ -152,9 +152,21 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTaskCompletion(id) {
         const taskIndex = tasks.findIndex(task => task.id === id);
         if (taskIndex > -1) {
-            tasks[taskIndex].isCompleted = !tasks[taskIndex].isCompleted;
+            const wasCompleted = tasks[taskIndex].isCompleted; 
+            tasks[taskIndex].isCompleted = !wasCompleted; 
+
             saveTasks();
-            renderTasks(); 
+            renderTasks();
+
+            // Trigger confetti if task was just completed
+            if (!wasCompleted && tasks[taskIndex].isCompleted) {
+                // Confetti animation
+                confetti({
+                    particleCount: 350, // Number of confetti particles
+                    spread: 150,         // How wide the confetti spreads
+                    origin: { y: 0.6 }  // Origin of the confetti (bottom-center)
+                });
+            }
         }
     }
 
