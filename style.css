@@ -3,16 +3,27 @@
 :root {
     --primary-purple: #6a5acd; 
     --light-bg: #f0f2f5;
-    --card-bg: #ffffff;
+    --card-bg: #fffdf5;
     --text-color-dark: #333;
     --text-color-light: #666;
     --border-color: #e0e0e0;
     --placeholder-color: #999;
+    --secondary-color: #888; 
+
+    --status-all: var(--primary-purple);
+    --status-pending: #ffc107;
+    --status-completed: #28a745; 
+
+    --priority-minor: #17a2b8; 
+    --priority-moderate: #ffc107; 
+    --priority-top: #dc3545; 
 }
 
 body {
     font-family: 'Poppins', sans-serif;
-    background-color: var(--light-bg);
+    background: url(https://img.freepik.com/premium-photo/purple-purple-abstract-background-with-purple-blue-waves_337384-154100.jpg) no-repeat center center fixed;
+    background-size: 100% 100%;
+    image-resolution:  from-image;
     display: flex;
     justify-content: center;
     align-items: flex-start; 
@@ -21,15 +32,18 @@ body {
     padding: 40px 20px; 
     box-sizing: border-box;
     color: var(--text-color-dark);
+    width: 100%;
+    overflow-x: hidden; 
+    align-items: center;
 }
 
 .container {
     width: 100%;
-    max-width: 600px; 
+    max-width: 800px; 
     text-align: center;
 }
 
-/* Header Styling */
+
 .app-header {
     margin-bottom: 40px;
 }
@@ -61,15 +75,23 @@ body {
     margin-top: 0;
 }
 
-/* Task Form Card */
+
 .task-form-card {
     background-color: var(--card-bg);
     border-radius: 20px;
     padding: 30px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     text-align: left;
+    margin-bottom: 30px; 
+    width: 100%; 
+    max-width: 700px; 
 }
 
+.container > .task-form-card {
+    max-width: 740px;
+    width: 100%; 
+    align-items:center; 
+}
 .form-header {
     display: flex;
     align-items: center;
@@ -106,6 +128,37 @@ body {
     border-width: 0;
 }
 
+input[type="text"],
+textarea,
+select {
+    width: 100%;
+    padding: 15px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 1em;
+    font-family: 'Poppins', sans-serif;
+    color: var(--text-color-dark);
+    box-sizing: border-box; 
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]::placeholder,
+textarea::placeholder {
+    color: var(--placeholder-color);
+}
+
+input[type="text"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: var(--primary-purple);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
 .form-row {
     display: flex;
     gap: 20px;
@@ -127,10 +180,9 @@ body {
     top: 50%;
     transform: translateY(-50%);
     color: var(--placeholder-color);
-    pointer-events: none;
+    pointer-events: none; 
 }
 
-/* Custom Select Dropdown Styling */
 .custom-select-wrapper {
     position: relative;
     width: 100%;
@@ -145,8 +197,19 @@ select {
     cursor: pointer;
 }
 
+.custom-select-arrow {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 8px;
+    height: 8px;
+    border-bottom: 2px solid var(--placeholder-color);
+    border-right: 2px solid var(--placeholder-color);
+    pointer-events: none;
+}
 
-/* Add Task Button */
+
 .add-task-btn {
     background-color: var(--primary-purple);
     color: var(--card-bg);
@@ -161,15 +224,147 @@ select {
     justify-content: center;
     gap: 10px;
     transition: background-color 0.3s ease, transform 0.2s ease;
-    width: fit-content;
+    width: fit-content; 
     margin-left: auto; 
 }
 
 .add-task-btn:hover {
-    background-color: #5a4acb;
+    background-color: #5a4acb; 
     transform: translateY(-2px);
 }
 
 .add-task-btn i {
     font-size: 1em;
+}
+
+
+.task-list-section {
+    margin-top: 30px;
+}
+
+.task-summary-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 15px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.task-summary-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--text-color-light);
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.task-summary-item i {
+    font-size: 1.1em;
+}
+
+.task-summary-item .task-count {
+    font-weight: 600;
+    font-size: 0.9em;
+    padding: 2px 7px;
+    border-radius: 15px;
+    background-color: var(--light-bg);
+    color: var(--text-color-dark);
+}
+
+.task-summary-item[data-filter="all"].active {
+    background-color: rgba(106, 90, 205, 0.1); 
+    color: var(--primary-purple);
+}
+.task-summary-item[data-filter="all"].active .task-count {
+    background-color: var(--primary-purple);
+    color: var(--card-bg);
+}
+
+.task-summary-item[data-filter="pending"].active {
+    background-color: rgba(255, 193, 7, 0.1); 
+    color: var(--status-pending);
+}
+.task-summary-item[data-filter="pending"].active .task-count {
+    background-color: var(--status-pending);
+    color: var(--text-color-dark);
+}
+
+.task-summary-item[data-filter="completed"].active {
+    background-color: rgba(40, 167, 69, 0.1); 
+    color: var(--status-completed);
+}
+.task-summary-item[data-filter="completed"].active .task-count {
+    background-color: var(--status-completed);
+    color: var(--card-bg);
+}
+
+.task-filters-card {
+    background-color: var(--card-bg);
+    border-radius: 20px;
+    padding: 15px 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap; 
+    gap: 10px; 
+}
+
+.current-filter-display {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-color-dark);
+}
+
+.current-filter-display i {
+    color: var(--secondary-color);
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-priority-wrapper {
+    width: 150px; 
+}
+
+.filter-priority-wrapper select {
+    padding: 10px 15px; 
+    font-size: 0.95em;
+    border-radius: 8px;
+    width: 100%;
+}
+
+.clear-filters-btn {
+    background-color: transparent;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 15px;
+    font-size: 0.95em;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.clear-filters-btn:hover {
+    background-color: var(--light-bg);
+    color: var(--text-color-dark);
+    border-color: var(--text-color-dark);
 }
