@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Task Flow</title>
+    <title>Task Management </title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
@@ -15,7 +15,7 @@
                 <i class="fas fa-clipboard-list"></i>
             </div>
             <h1 style="text-decoration: none; color: aliceblue;">Task Management</h1>
-            <p style="text-decoration: none; color: aliceblue;">Organize your tasks beautifully</p>
+            <p style="text-decoration: none; color: aliceblue;">Plan your day, the smart way!</p>
         </header>
 
         <main class="task-form-card">
@@ -27,7 +27,7 @@
             <form id="taskForm">
                 <div class="form-group">
                     <label for="taskTitle" class="sr-only">Task Title</label>
-                    <input type="text" id="taskTitle" placeholder="What needs to be done?" required>
+                    <input type="text" id="taskTitle" placeholder="What needs to be done? (Title, Outline, Topic,... etc.)" required>
                 </div>
 
                 <div class="form-group">
@@ -100,20 +100,68 @@
             <div id="taskList" class="task-list">
                 </div>
 
-            <div id="emptyState" class="empty-state">
+           <div id="emptyState" class="empty-state">
                 <div class="empty-state-icon">
                     <i class="fas fa-clipboard"></i>
                 </div>
-                <p class="empty-state-text-large">No tasks yet. Add your first task above!</p>
+                <p id="emptyAll" class="empty-state-text-large">No tasks yet. Add your first task above!</p>
                 <p class="empty-state-text-small">Your tasks will appear here once you create them.</p>
+                <p id="emptyPending" class="empty-state-text-large" style="display:none;">No pending tasks. <br><small>Enjoy your progress!</small></p>
+                <p id="emptyCompleted" class="empty-state-text-large" style="display:none;">No completed tasks yet. <br><small>Finish some tasks to see them here!</small></p>
+                <p id="emptyMissing" class="empty-state-text-large" style="display:none;">No missing tasks. <br><small>Great job staying on track!</small></p>
             </div>
 
         </section>
 
     </div>
 
+    <div id="deleteConfirmModal" class="modal delete-modal">
+        <div class="contents">
+            <h3>Are you sure you want to delete this task?</h3>
+            <div class="actions">
+                <button id="deleteConfirmYes" class="delete-btn">Yes</button>
+                <button id="deleteConfirmNo" class="cancel-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
+        <div id="editTaskModal" class="modal-overlay">
+            <div class="modal-content">
+                <h2>Edit Task</h2>
+                <form id="editTaskForm">
+                    <input type="hidden" id="editTaskId">
+                    <div class="form-group">
+                        <label for="editTaskTitle">Title:</label>
+                        <input type="text" id="editTaskTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskDescription">Description:</label>
+                        <textarea id="editTaskDescription" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="editDueDate">Due Date:</label>
+                        <input type="text" id="editDueDate" placeholder="MM/DD/YYYY">
+                    </div>
+                    <div class="form-group">
+                        <label for="editPriority">Priority:</label>
+                        <select id="editPriority">
+                            <option value="minor">Minor</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="top">Top</option>
+                        </select>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" id="cancelEditBtn">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
 </body>
 </html>
